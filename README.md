@@ -2,7 +2,7 @@
 
 ## DANNY: Decentralized Approximate Nearest Neighbors Yummy!
 
-**DANNY** is a decentralized vector database for building vector search applications powered by the fantastic [Warp Contracts](https://warp.cc/).
+**DANNY** is a decentralized vector database for building vector search applications, powered by [Warp Contracts](https://warp.cc/), built by [FirstBatch](https://twitter.com/FirstBatchxyz_).
 
 For a comprehensive overview, please visit the link [here](https://mirror.xyz/0x4a34646adaf10EEfBf2C210B72918e763d306fdb/5tJxWTJ4j3OqB6w0um4lcUt9q1UsEKi04WWPRbdUz08)
 
