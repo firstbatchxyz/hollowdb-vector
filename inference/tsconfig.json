@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "Node",
+    "target": "ES2018",
+    "lib": ["dom"],
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+  },
+  "exclude": ["node_modules", "tools", "rust/tests"]
+}

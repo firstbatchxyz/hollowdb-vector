@@ -1,0 +1,16 @@
+[package]
+name = "danny_definition"
+version = "0.1.0"
+edition = "2021"
+description = "Danny Contract Definitions"
+license = "MIT"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio-test = "0.4.2"
+schemars = "0.8.10"
+strum = "0.15"
+strum_macros = "0.15"
+rand = "0.7.0"
+warp_wasm_utils = { path = "../../../shared" }
