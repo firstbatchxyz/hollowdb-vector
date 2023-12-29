@@ -11,7 +11,7 @@
         <img alt="Workflow: Tests" src="https://github.com/firstbatchxyz/hollowdb-vector/actions/workflows/tests.yml/badge.svg?branch=main">
     </a>
     <a href="https://opensource.org/license/apache-2-0/" target="_blank">
-        <img alt="License: MIT" src="https://img.shields.io/badge/license-Apache%202.0-blue.svg">
+        <img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-7CB9E8.svg">
     </a>
   </div>
   
