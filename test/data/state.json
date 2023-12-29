@@ -1,0 +1,21 @@
+{
+  "version": "0.0.0",
+  "owner": "",
+  "verificationKeys": {
+    "auth": null
+  },
+  "isProofRequired": {
+    "auth": false
+  },
+  "canEvolve": true,
+  "whitelists": {
+    "put": {},
+    "update": {},
+    "set": {}
+  },
+  "isWhitelistRequired": {
+    "put": false,
+    "update": false,
+    "set": false
+  }
+}
