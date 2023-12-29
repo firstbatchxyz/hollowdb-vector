@@ -69,16 +69,20 @@ const point = [-0.28571999073028564 /* and many more... */, 0.13964000344276428]
 const metadata = {
   name: "My favorite vector!",
 };
+
+// insert a point
 await vectordb.insert(point, metadata);
 ```
 
-> [!TIP]
+Metadata is optional, and you can leave it out during `insert`. If you would like to set it a later time, you can always do:
+
+```ts
+vectordb.db.set_metadata(index, metadata);
+```
+
+> [!NOTE]
 >
-> Metadata is optional, and you can leave it out during `insert`. If you would like to set it a later time, you can always do:
->
-> ```ts
-> vectordb.db.set_metadata(index, metadata);
-> ```
+> The complexity of inserting a point may increase with more points in the DB.
 
 ### Fetching a Vector
 
@@ -99,7 +103,10 @@ const query = [-0.28571999073028564 /* and many more... */, 0.13964000344276428]
 // number of top results to return
 const K = 10;
 
+// make a KNN search
 const results = await vectordb.knn_search(query, K);
+
+// each result contains the vector id, its distance to query, and metadata
 const { id, distance, metadata } = results[0];
 ```
 
