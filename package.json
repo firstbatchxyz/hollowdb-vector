@@ -1,0 +1,100 @@
+{
+  "name": "hollowdb-vector",
+  "version": "0.1.0",
+  "description": "A vectorDB over HollowDB using HNSW",
+  "author": "FirstBatch Team <dev@firstbatch.xyz>",
+  "contributors": [
+    "Erhan Tezcan <erhan@firstbatch.xyz> (https://github.com/erhant)"
+  ],
+  "license": "Apache-2.0",
+  "scripts": {
+    "proto:code:hnsw": "npx pbjs ./proto/hnsw_comm.proto -w commonjs -t static-module -o ./proto/hnsw_comm.js",
+    "proto:type:hnsw": "npx pbts ./proto/hnsw_comm.js -o ./proto/hnsw_comm.d.ts",
+    "proto:code:req": "npx pbjs ./proto/request.proto -w commonjs -t static-module -o ./proto/request.js",
+    "proto:type:req": "npx pbts ./proto/request.js -o ./proto/request.d.ts",
+    "test": "jest --bail",
+    "test:hollow": "jest ./test/hollow.test.ts --bail",
+    "test:hnsw": "jest ./test/hnsw.test.ts --bail",
+    "build": "parcel build",
+    "check": "npx tsc --noEmit && echo \"All good.\"",
+    "format": "prettier --check '**/*.ts'"
+  },
+  "type": "module",
+  "source": "src/index.ts",
+  "types": "lib/index.d.ts",
+  "cjs": "lib/index.cjs",
+  "mjs": "lib/index.mjs",
+  "exports": {
+    "types": "./lib/index.d.ts",
+    "import": "./lib/index.mjs",
+    "require": "./lib/index.cjs",
+    "default": "./lib/index.mjs"
+  },
+  "targets": {
+    "cjs": {
+      "outputFormat": "commonjs",
+      "context": "node",
+      "scopeHoist": false,
+      "includeNodeModules": false,
+      "optimize": false
+    },
+    "mjs": {
+      "outputFormat": "esmodule",
+      "context": "node",
+      "scopeHoist": false,
+      "includeNodeModules": false,
+      "optimize": false
+    }
+  },
+  "files": [
+    "lib/",
+    "LICENSE",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@parcel/config-default": "^2.10.3",
+    "@parcel/packager-ts": "^2.10.3",
+    "@parcel/transformer-typescript-tsc": "^2.10.3",
+    "@parcel/transformer-typescript-types": "^2.10.3",
+    "warp-contracts-plugin-ethers": "^1.0.7",
+    "warp-contracts-plugin-snarkjs": "^0.2.1",
+    "warp-contracts-plugin-deploy": "1.0.9",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.5",
+    "arlocal": "1.1.61",
+    "arweave": "^1.14.4",
+    "jest": "^29.7.0",
+    "parcel": "^2.10.3",
+    "prettier": "^3.1.1",
+    "protobufjs-cli": "^1.1.2",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "heap-js": "^2.3.0",
+    "protobufjs": "^7.2.5"
+  },
+  "peerDependencies": {
+    "hollowdb": "^1.3.5",
+    "ioredis": "^5.3.2",
+    "warp-contracts": "1.4.17",
+    "warp-contracts-redis": "^0.4.0"
+  },
+  "prettier": {
+    "printWidth": 120
+  },
+  "keywords": [
+    "key-value",
+    "storage",
+    "database",
+    "blockchain",
+    "smart-contracts",
+    "arweave",
+    "firstbatch",
+    "hnsw",
+    "dria",
+    "vector",
+    "vectordb"
+  ]
+}

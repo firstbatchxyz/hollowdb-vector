@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package index_buffer;
+
+
+message LayerNode {
+  uint32 level = 1; // Using uint64 as a safe alternative for usize
+  uint32 idx = 2; // Using uint64 as a safe alternative for usize
+  bool visible = 3; // Whether the node is visible
+  map<uint32, float> neighbors = 4; // Neighbor idx and its distance
+}
+
+
+message Point {
+  uint32 idx = 1; // Using uint64 as a safe alternative for usize
+  repeated float v = 2; // Vector of floats
+}
+
+
+message PointQuant {
+  uint32 idx = 1; // Using uint64 as a safe alternative for usize
+  repeated uint32 v = 2; // Vector of ints
+}

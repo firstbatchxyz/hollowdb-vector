@@ -1,84 +1,169 @@
-![DANNY Logo](https://imagedelivery.net/kbUqkpOIvA4TJOyi-hNQfQ/cbfba403-0864-4ace-dbfb-8b5052570700/public)
+<p align="center">
+  <h1 align="center">
+    HollowDB Vector
+  </h1>
 
-## DANNY: Decentralized Approximate Nearest Neighbors Yummy!
+  <div align="center">
+    <a href="https://www.npmjs.com/package/hollowdb-vector" target="_blank">
+      <img alt="NPM" src="https://img.shields.io/npm/v/hollowdb-vector?logo=npm&color=CB3837">
+    </a>
+    <a href="./.github/workflows/tests.yml" target="_blank">
+        <img alt="Workflow: Tests" src="https://github.com/firstbatchxyz/hollowdb-vector/actions/workflows/tests.yml/badge.svg?branch=main">
+    </a>
+    <a href="https://opensource.org/license/apache-2-0/" target="_blank">
+        <img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-7CB9E8.svg">
+    </a>
+  </div>
+  
+  <p align="center">
+    <i>Implementation of Hierarchical Navigable Small Worlds (HNSW) index over <a href="https://hollowdb.xyz/" target="_blank">HollowDB</a>.</i>
+  </p>
+</p>
 
-**DANNY** is a decentralized vector database for building vector search applications, powered by [Warp Contracts](https://warp.cc/), built by [FirstBatch](https://twitter.com/FirstBatchxyz_).
+## Usage
 
-For a comprehensive overview, please visit the link [here](https://mirror.xyz/0x4a34646adaf10EEfBf2C210B72918e763d306fdb/5tJxWTJ4j3OqB6w0um4lcUt9q1UsEKi04WWPRbdUz08)
+Install the package:
 
+```sh
+yarn add hollowdb-vector
+pnpm add hollowdb-vector
+npm install hollowdb-vector
+```
 
+You can create the VectorDB as follows:
 
+```ts
+import HollowDBVector from "hollowdb-vector";
+import { WarpFactory, defaultCacheOptions } from "warp-contracts";
+import { SetSDK } from "hollowdb";
+import { Redis } from "ioredis";
+import { RedisCache } from "warp-contracts-redis";
 
-1. 🏗️ [Foundations](#foundations)
-2. 🛠️ [Using DANNY](#using-danny)
-3. 🔮 [Future Work & Contributions](#future-work)
+// connect to Redis
+const redis = new Redis();
 
----
+// create Warp instance with Redis cache
+const warp = WarpFactory.forMainnet().useKVStorageFactory(
+  (contractTxId: string) =>
+    new RedisCache({ ...defaultCacheOptions, dbLocation: `${contractTxId}` }, { client: redis }),
+);
 
-## 🏗️ Foundations
+// create HollowDB SDK
+const wallet = JSON.parse(readFileSync("./path/to/wallet.json", "utf-8"));
+const contractTxId = "your-contract-tx-id";
+const hollowdb = new SetSDK<string>(wallet, contractTxId, warp);
 
-Representing images, videos, books, comments, and articles as vectors while encoding their context enables operations such as cosine similarity or Euclidian distance between them. Finding the most similar/close vector based on the chosen metric (cosine similarity, euclidian, etc.) is at the heart of building AI applications.
+// create HollowDB Vector
+const vectordb = new HollowDBVector(hollowdb);
+```
 
-DANNY acts as a vector database, offering powerful tools for developing various applications, including recommendation systems and semantic search functionalities. By utilizing Warp Contracts, apps can deliver semantic search and/or personalized suggestions for products, content, or venues tailored to individual preferences to enhance the user experience.
+### Inserting a Vector
 
-On the other hand, DANNY has the potential to remove duplicates from large sets of data and detect anomalies, creating new possibilities for DAO's action space and fighting fraud on de-fi, Sybil identities, and more. This means you can build transparent and decentralized algorithms such as:
+With this, you can insert a new point:
 
-- 📚 Semantic search
-- 🎯 Recommendation
-- 🚫 Deduplication
-- 🕵️‍♀️ Fraud detection -- and many more!
+```ts
+// an array of floats
+const point = [-0.28571999073028564 /* and many more... */, 0.13964000344276428];
 
-### 🎛️ **Current State**
+// any object
+const metadata = {
+  name: "My favorite vector!",
+};
 
-Developers can use DANNY to create vector databases (train) from their custom datasets and run queries for vector search through Warp contracts. 
+// insert a point
+await vectordb.insert(point, metadata);
+```
 
-Currently DANNY implements ANNOY Search algorithm for vector search. DANNY doesn't fully support CRUD operations as a database yet. Developers should re-train entire corpus to add new vectors to DANNY. 
+Metadata is optional, and you can leave it out during `insert`. If you would like to set it a later time, you can always do:
 
-The library contains source code for contracts, workers, and utilities that allow training, deployment, and inference of DANNY models. 
+```ts
+vectordb.db.set_metadata(index, metadata);
+```
 
-## 🛠️ Using DANNY
+> [!NOTE]
+>
+> The complexity of inserting a point may increase with more points in the DB.
 
-1. **Dataset creation** and **indexing** with DANNY are explained [here](indexing/README.md) in detail.
+### Fetching a Vector
 
-2. **Sharding**, **deploying** contracts and **querying** DANNY are explained [here](inference/README.md) in detail.
+You can get a vector by its index, which returns its point value and metadata:
 
-## 🔮 Future Work
+```ts
+const { point, metadata } = await vectordb.get_vector(index);
+```
 
-DANNY is open to public contributions. We, as FirstBatch, will be developing DANNY to be a full-feature Vector database with multiple indexing algorithms.
+### Querying a Vector
 
-- 🆕 New Indexing methods
-    - 🌐  Adding support for Hierarchical Navigable Small Worlds (HNSW)
-    - 🔍 Adding support for Locality Sensitive Hashing (LSH)
-- 🏄🏼‍ Parametric distance metrics, L2, L1, cosine similarity, angular
-- 🌐  Distributed training: Creating DANNY models should also be possible in a distributed manner for larger datasets. Moving transparency a step further.
-- 🚀 DANNY Node Release: DANNY Node will provide gRPC-wrapped decentralized scalability tools, making DANNY a scalable service with competitive features.
-- 🔄 CRUD operations: Models should enable appending or removing vectors instead of re-training.
+You can make a query and return top K relevant results:
 
-## 🤝 Contributing
+```ts
+// a query point
+const query = [-0.28571999073028564 /* and many more... */, 0.13964000344276428];
 
-We welcome contributions from the community. If you are interested in contributing to DANNY, please follow these steps:
+// number of top results to return
+const K = 10;
 
-Fork the repository on GitHub.
-Create a new branch for your feature or bugfix.
-Implement your changes and write tests if applicable.
-Submit a pull request with a clear description of your changes and reference any related issues.
-For questions or discussions, please join our community on Discord or Telegram.
+// make a KNN search
+const results = await vectordb.knn_search(query, K);
 
-## 📜 License
+// each result contains the vector id, its distance to query, and metadata
+const { id, distance, metadata } = results[0];
+```
 
-DANNY is licensed under the MIT License.
+## Setup
 
-## 🙏 Acknowledgements
+For local setup of this repo, first clone it.
 
-We want to thank the following projects and their contributors for providing the foundation for DANNY:
+```sh
+git clone https://github.com/firstbatchxyz/hollowdb-vector
+```
 
-- [ANNOY](https://github.com/spotify/annoy)
-- [Warp](https://warp.cc/)
+Then, install packages:
 
+```sh
+pnpm install
+```
 
-## 🌐 Join our Dev Server
-We'd love for you to be a part of our dev community! If you have any questions, want to discuss DANNY, or simply want to connect with like-minded individuals, feel free to join our Discord server.
+Peer dependencies should be installed automatically.
 
-[![Join our Discord server!](https://invidget.switchblade.xyz/2wuU9ym6fq)](http://discord.gg/2wuU9ym6fq)
+### Protobuffers
 
-Click the badge above to receive an invitation to our Discord server. Let's build the future of decentralized AI applications together! 🚀
+We include the pre-compiled protobuf within the repo, but if you were to change the protobuf later, you can generate the compiled code as follows:
+
+```sh
+# HNSW protobufs
+pnpm proto:code:hnsw # generate js code
+pnpm proto:type:hnsw # generate types
+
+# Request protobufs
+pnpm proto:code:req # generate js code
+pnpm proto:type:req # generate types
+```
+
+## Testing
+
+Tests are ran over a few cases for a fixed set of $N, K$ parameters that are prepared in [Python](./test/python/main.py), and are compared in Typescript. Run the tests via:
+
+```sh
+pnpm test
+```
+
+> [!WARNING]
+>
+> You need a live Redis server for the HollowDB test to work. Furthermore, the HollowDB tests may take some time.
+
+## Styling
+
+Check the formatting with:
+
+```sh
+pnpm check
+```
+
+## Legacy
+
+HollowDB Vector replaces DANNY, for the legacy code please [refer to this branch](https://github.com/firstbatchxyz/danny/tree/legacy).
+
+## License
+
+Dria Docker is licensed under [Apache 2.0](./LICENSE).

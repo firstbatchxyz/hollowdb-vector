@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package request_buffer;
+
+
+message Singleton {
+  repeated float v = 1; // Vector of floats
+  map<string, string> metadata = 2; // Neighbor idx and its distance
+}
+
+
+message Batch {
+  repeated string b = 1;
+}
