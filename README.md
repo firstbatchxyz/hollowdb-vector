@@ -8,7 +8,7 @@
       <img alt="NPM" src="https://img.shields.io/npm/v/hollowdb-vector?logo=npm&color=CB3837">
     </a>
     <a href="./.github/workflows/tests.yml" target="_blank">
-        <img alt="Workflow: Tests" src="https://github.com/firstbatchxyz/hollowdb-vector/actions/workflows/tests.yml/badge.svg?branch=main">
+        <img alt="Workflow: Tests" src="https://github.com/firstbatchxyz/hollowdb-vector/actions/workflows/tests.yml/badge.svg?branch=master">
     </a>
     <a href="https://opensource.org/license/apache-2-0/" target="_blank">
         <img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-7CB9E8.svg">
