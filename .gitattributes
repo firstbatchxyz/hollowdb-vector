@@ -1,2 +1,3 @@
 proto/*.d.ts linguist-generated
 proto/*.js linguist-generated
+lib/* linguist-generated
