@@ -55,12 +55,13 @@ export default class HollowDBVector<M = any> extends HNSW<M> {
    * @returns deployed contract transaction id and source transaction id
    */
   static async deploy(wallet: JWKInterface, warp: Warp): Promise<{ contractTxId: string; srcTxId: string }> {
+    // source transaction id, for the contract to be deployed
+    const srcTxId = "lSRrPRiiMYeJsGgT9BdV9OTZTw3hZw_UkGVpEXjD5sY";
+
+    // our source txid is on mainnet, so we must make sure of that
     if (warp.environment !== "mainnet") {
       throw new Error("Warp must be connected to mainnet.");
     }
-
-    // source transaction id, for the contract to be deployed
-    const srcTxId = "lSRrPRiiMYeJsGgT9BdV9OTZTw3hZw_UkGVpEXjD5sY";
 
     // initailly the wallet is whitelisted on everything, and all
     // whitelists are required for the contract

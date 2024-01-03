@@ -1,4 +1,5 @@
 import { SetSDK } from "hollowdb";
+import { JWKInterface, Warp } from "warp-contracts";
 /** A point within the embedding space. */
 type Point = number[];
 /** A "world" in HNSW. */
@@ -135,6 +136,7 @@ export default class HollowDBVector<M = any> extends HNSW<M> {
      * @param hollowdb a hollowdb instance with `set` and `setMany` operations, where values are `string` typed.
      * - Vectors are encoded & decoded with protobuffers, and the base64 of encodings are stored in HollowDB
      * - Metadatas are stored as JSON-stringified values.
+     *
      * @param options Optional HNSW parameters:
      *
      * - `m`:  **Number of established connections.**
@@ -155,6 +157,17 @@ export default class HollowDBVector<M = any> extends HNSW<M> {
         efConstruction?: number;
         efSearch?: number;
     });
+    /** Deploy a new HollowDB Vector contract,
+     * which is a HollowDB contract with `set` and `setMany` functions in particular.
+     *
+     * @param wallet your Arweave wallet
+     * @param warp a Warp instance on mainnet
+     * @returns deployed contract transaction id and source transaction id
+     */
+    static deploy(wallet: JWKInterface, warp: Warp): Promise<{
+        contractTxId: string;
+        srcTxId: string;
+    }>;
 }
 
 //# sourceMappingURL=index.d.ts.map
