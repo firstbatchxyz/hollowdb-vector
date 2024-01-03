@@ -20,7 +20,7 @@
   </p>
 </p>
 
-## Usage
+## Installation
 
 Install the package:
 
@@ -29,6 +29,8 @@ yarn add hollowdb-vector
 pnpm add hollowdb-vector
 npm install hollowdb-vector
 ```
+
+## Usage
 
 You can create the VectorDB as follows:
 
@@ -108,6 +110,15 @@ const results = await vectordb.knn_search(query, K);
 
 // each result contains the vector id, its distance to query, and metadata
 const { id, distance, metadata } = results[0];
+```
+
+### Deploying your own Contract
+
+HollowDB Vector exports a static function that allows you two deploy a new contract that you own. Assuming that you have a `wallet` and a `warp` instance as described [above](#usage), you can create a new contract with:
+
+```ts
+const { contractTxId } = await HollowDBVector.deploy(wallet, warp);
+console.log("Deployed at:", contractTxId);
 ```
 
 ## Setup
