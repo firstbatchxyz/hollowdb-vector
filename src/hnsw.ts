@@ -12,7 +12,7 @@ import type { DBInterface } from "./db/interfaces";
  * @template M type of the metadata, which is extra information
  * stored along with each point, a common practice in vectorDBs.
  */
-export class HNSW<M = any> {
+export class HNSW<M = unknown> {
   /** A database that supports `DBInterface`. */
   db: DBInterface<M>;
 
@@ -28,7 +28,7 @@ export class HNSW<M = any> {
   /** Factor for quality of search. */
   ef: number;
 
-  constructor(db: DBInterface, M: number, ef_construction: number, ef_search: number) {
+  constructor(db: DBInterface<M>, M: number, ef_construction: number, ef_search: number) {
     this.db = db;
 
     this.m = M; // paper proposes [5,48] is a good range for m (Weavite uses 64)
@@ -91,7 +91,7 @@ export class HNSW<M = any> {
 
         ep = W.map((e) => [e[0], e[1]] as Node); // copy W to ep
         const neighbors = this.select_neighbors(q, W, l_c);
-        const indices = neighbors.map(([_, idx]) => idx);
+        const indices = neighbors.map(([, idx]) => idx);
         const nodes = await this.db.get_neighbors(l_c, indices);
 
         // add bidirectional connections from neighbors to q at layer l_c
@@ -108,7 +108,7 @@ export class HNSW<M = any> {
             // shrink connections
             const eNewConn = this.select_neighbors(await this.db.get_point(e[1]), eConn, l_c);
             // loop below equivalent to: self.graphs[l_c][e[1]] = {ind: dist for dist, ind in eNewConn}
-            let dict: Record<number, number> = {};
+            const dict: Record<number, number> = {};
             for (const eNew of eNewConn) {
               dict[eNew[1]] = eNew[0];
             }
@@ -139,7 +139,7 @@ export class HNSW<M = any> {
    */
   async search_layer(q: Point, ep: Node[], ef: number, l_c: number) {
     // set of visited elements | v = set(p for _, p in ep)
-    const V = new Set<number>(ep.map(([_, id]) => id));
+    const V = new Set<number>(ep.map(([, id]) => id));
 
     // set of candidates, min-heapified
     const C = new NodeHeap(ep);
@@ -228,7 +228,6 @@ export class HNSW<M = any> {
 
   /** K-nearest Neighbor search. */
   async knn_search(q: Point, K: number): Promise<KNNResult<M>[]> {
-    let W: Node[] = [];
     const ep_index = await this.db.get_ep();
 
     // edge case: no points were added at all

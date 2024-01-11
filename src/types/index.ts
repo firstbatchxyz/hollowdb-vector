@@ -11,7 +11,7 @@ export type LayerNode = Record<number, number>;
 export type Node = [distance: number, id: number];
 
 /** Result of a KNN query for one vector. */
-export type KNNResult<M = any> = {
+export type KNNResult<M = unknown> = {
   id: number;
   distance: number;
   metadata: M | null;

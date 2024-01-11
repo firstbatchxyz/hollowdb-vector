@@ -6,7 +6,7 @@ import { keys, safeParse } from "../../src/db/common";
 /** A mock DB that stores everything in JS memory; but,
  * - uses a KV interface
  * - uses protobufs to store values as serialized & base64-encoded values */
-export class KVMemory<M = any> implements DBInterface<M> {
+export class KVMemory<M = unknown> implements DBInterface<M> {
   private kvdb: Record<string, string | undefined> = {};
 
   async get_ep(): Promise<number | null> {

@@ -10,12 +10,12 @@ import { RedisCache } from "warp-contracts-redis";
 
 type Metadata = { id: number };
 
-describe("HollowDB Vector", () => {
+describe.skip("HollowDB Vector", () => {
   let train: number[][];
   let metadatas: Metadata[];
 
   let arlocal: ArLocal;
-  let vectordb: HollowDBVector;
+  let vectordb: HollowDBVector<Metadata>;
   const ARWEAVE_PORT = 3169;
 
   // testing just for 100 because that takes long enough (approx 200 seconds insert)

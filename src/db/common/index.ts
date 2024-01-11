@@ -11,6 +11,6 @@ export const keys = {
 } as const;
 
 /** Safely parses a data, returning `null` if its falsy. */
-export function safeParse<V = any>(data: string | null | undefined): V | null {
+export function safeParse<V = unknown>(data: string | null | undefined): V | null {
   return data ? JSON.parse(data) : null;
 }

@@ -4,7 +4,7 @@ import { decodeLayerNode, decodePoint, encodeLayerNode, encodePoint } from "../p
 import { SetSDK } from "hollowdb";
 import { keys, safeParse } from "./common";
 
-export class HollowMemory<M = any> implements DBInterface<M> {
+export class HollowMemory<M = unknown> implements DBInterface<M> {
   client: SetSDK<string>;
 
   /**

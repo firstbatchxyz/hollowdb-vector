@@ -3,7 +3,7 @@ import type { Graph, LayerNode, Point } from "../../types";
 /**
  * The `graphs` and `points` of HNSW can be stored in any interface supported by this interface.
  */
-export interface DBInterface<M = any> {
+export interface DBInterface<M = unknown> {
   /////////////// NEIGHBORS ///////////////
 
   /** Adds a new empty layer.

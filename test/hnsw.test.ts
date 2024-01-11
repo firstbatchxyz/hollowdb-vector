@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { HNSW } from "../src/hnsw";
 import { Memory } from "./db/memory";
 import { KVMemory } from "./db/kvMemory";
