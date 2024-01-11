@@ -4,7 +4,7 @@ import type { Redis } from "ioredis";
 import { decodeLayerNode, decodePoint, encodeLayerNode, encodePoint } from "../../src/proto";
 import { keys, safeParse } from "../../src/db/common";
 
-export class RedisMemory<M = any> implements DBInterface<M> {
+export class RedisMemory<M = unknown> implements DBInterface<M> {
   client: Redis;
 
   constructor(client: Redis) {

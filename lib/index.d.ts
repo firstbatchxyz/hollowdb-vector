@@ -9,7 +9,7 @@ type LayerNode = Record<number, number>;
 /** A distance and id of a point with respect to another node. */
 type Node = [distance: number, id: number];
 /** Result of a KNN query for one vector. */
-type KNNResult<M = any> = {
+type KNNResult<M = unknown> = {
     id: number;
     distance: number;
     metadata: M | null;
@@ -17,7 +17,7 @@ type KNNResult<M = any> = {
 /**
  * The `graphs` and `points` of HNSW can be stored in any interface supported by this interface.
  */
-interface DBInterface<M = any> {
+interface DBInterface<M = unknown> {
     /** Adds a new empty layer.
      * @param idx index of the point, which will allow us to
      * initalize the new later as `{[idx]: {}}`
@@ -91,7 +91,7 @@ interface DBInterface<M = any> {
  * @template M type of the metadata, which is extra information
  * stored along with each point, a common practice in vectorDBs.
  */
-declare class HNSW<M = any> {
+declare class HNSW<M = unknown> {
     /** A database that supports `DBInterface`. */
     db: DBInterface<M>;
     /** Number of established connections; should increase as dimension size increases. */
@@ -104,7 +104,7 @@ declare class HNSW<M = any> {
     ef_construction: number;
     /** Factor for quality of search. */
     ef: number;
-    constructor(db: DBInterface, M: number, ef_construction: number, ef_search: number);
+    constructor(db: DBInterface<M>, M: number, ef_construction: number, ef_search: number);
     /** Returns the vector & its metadata at given index. */
     get_vector(idx: number): Promise<{
         point: Point;
@@ -127,7 +127,18 @@ declare class HNSW<M = any> {
     /** K-nearest Neighbor search. */
     knn_search(q: Point, K: number): Promise<KNNResult<M>[]>;
 }
-export default class HollowDBVector<M = any> extends HNSW<M> {
+/**
+ * Backwards compatibility with [Dria](https://dria.co/) contracts that make use
+ * of a custom contract function called `upsertVectorMulti`, which is actually
+ * equivalent to `setMany`.
+ *
+ * This class overrides the `set` and `setMany` functions of `SetSDK<string>` from HollowDB.
+ */
+export class DriaCompatSDK extends SetSDK<string> {
+    setMany(keys: string[], values: string[]): Promise<void>;
+    set(key: string, value: string): Promise<void>;
+}
+export default class HollowDBVector<M = unknown> extends HNSW<M> {
     /** HollowDB SDK instance as passed in the `constructor`. */
     sdk: SetSDK<string>;
     /**
@@ -136,6 +147,8 @@ export default class HollowDBVector<M = any> extends HNSW<M> {
      * @param hollowdb a hollowdb instance with `set` and `setMany` operations, where values are `string` typed.
      * - Vectors are encoded & decoded with protobuffers, and the base64 of encodings are stored in HollowDB
      * - Metadatas are stored as JSON-stringified values.
+     * - Some of the HollowDB contracts (especially those in [Dria](https://dria.co/)) may use a function called
+     * `upsertVectorMulti`, which is incompatible with `SetSDK`. For these, you may use `DriaCompatSDK`.
      *
      * @param options Optional HNSW parameters:
      *

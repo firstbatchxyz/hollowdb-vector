@@ -1,0 +1,14 @@
+# js output
+build
+dist
+lib
+
+# modules
+node_modules
+
+# dot files
+.parcel-cache
+.github
+
+# protobufs
+proto

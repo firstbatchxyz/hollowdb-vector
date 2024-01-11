@@ -64,7 +64,6 @@ const vectordb = new HollowDBVector(hollowdb);
 With this, you can insert a new point:
 
 ```ts
-// an array of floats
 const point = [-0.28571999073028564 /* and many more... */, 0.13964000344276428];
 
 // any object
@@ -168,6 +167,18 @@ pnpm test
 Check the formatting with:
 
 ```sh
+pnpm format
+```
+
+Lint everything with:
+
+```sh
+pnpm lint
+```
+
+You can also check types with:
+
+```sh
 pnpm check
 ```
 
@@ -177,4 +188,4 @@ HollowDB Vector replaces DANNY, for the legacy code please [refer to this branch
 
 ## License
 
-Dria Docker is licensed under [Apache 2.0](./LICENSE).
+HollowDB Vector is licensed under [Apache 2.0](./LICENSE).

@@ -1,11 +1,11 @@
-import type { Graph, LayerNode, Node, Point } from "../../src/types";
+import type { Graph, LayerNode, Point } from "../../src/types";
 import type { DBInterface } from "../../src/db/interfaces";
 
 /**
  * A mock DB that stores everything in JS memory.
  * @template M metadata type
  */
-export class Memory<M = any> implements DBInterface<M> {
+export class Memory<M = unknown> implements DBInterface<M> {
   private points: Point[] = [];
   private metadatas: (M | null)[] = [];
   private graphs: Graph[] = [];

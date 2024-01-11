@@ -4,7 +4,30 @@ import { HollowMemory } from "./db/hollowdb";
 import type { JWKInterface, Warp } from "warp-contracts";
 import { ArweaveSigner } from "warp-contracts-plugin-deploy";
 
-export default class HollowDBVector<M = any> extends HNSW<M> {
+/**
+ * Backwards compatibility with [Dria](https://dria.co/) contracts that make use
+ * of a custom contract function called `upsertVectorMulti`, which is actually
+ * equivalent to `setMany`.
+ *
+ * This class overrides the `set` and `setMany` functions of `SetSDK<string>` from HollowDB.
+ */
+export class DriaCompatSDK extends SetSDK<string> {
+  override async setMany(keys: string[], values: string[]): Promise<void> {
+    await this.base.dryWriteInteraction({
+      function: "upsertVectorMulti",
+      value: {
+        keys,
+        values,
+      },
+    });
+  }
+
+  override async set(key: string, value: string): Promise<void> {
+    await this.setMany([key], [value]);
+  }
+}
+
+export default class HollowDBVector<M = unknown> extends HNSW<M> {
   /** HollowDB SDK instance as passed in the `constructor`. */
   sdk: SetSDK<string>;
 
@@ -14,6 +37,8 @@ export default class HollowDBVector<M = any> extends HNSW<M> {
    * @param hollowdb a hollowdb instance with `set` and `setMany` operations, where values are `string` typed.
    * - Vectors are encoded & decoded with protobuffers, and the base64 of encodings are stored in HollowDB
    * - Metadatas are stored as JSON-stringified values.
+   * - Some of the HollowDB contracts (especially those in [Dria](https://dria.co/)) may use a function called
+   * `upsertVectorMulti`, which is incompatible with `SetSDK`. For these, you may use `DriaCompatSDK`.
    *
    * @param options Optional HNSW parameters:
    *

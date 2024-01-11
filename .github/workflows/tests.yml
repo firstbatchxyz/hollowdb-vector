@@ -40,14 +40,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
+      - name: Lint everything
+        run: pnpm lint
+      
+      - name: Check formatting
+        run: pnpm format
+
+      - name: Build
+        run: pnpm build
+
       - name: Start Redis
         uses: supercharge/redis-github-action@1.5.0
         with:
           redis-version: 7
           redis-port: 6379
-
-      - name: Build
-        run: pnpm build
 
       - name: Run tests
         run: pnpm test
