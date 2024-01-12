@@ -1,7 +1,10 @@
 name: tests-fixing
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - ci-testing
+
 
 jobs:
   test:
