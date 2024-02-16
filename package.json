@@ -1,6 +1,6 @@
 {
   "name": "hollowdb-vector",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A vectorDB over HollowDB using HNSW",
   "author": "FirstBatch Team <dev@firstbatch.xyz>",
   "contributors": [
